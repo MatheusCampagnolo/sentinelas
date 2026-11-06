@@ -28,19 +28,19 @@ function TopBar() {
 
   return (
     <header className="relative z-[1100] h-16 border-b border-slate-200 bg-white text-slate-900 shadow-sm">
-      <div className="flex h-full items-center justify-between gap-4 px-5 sm:px-7">
-        <Link href="/" className="flex items-center gap-3">
-          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-800 text-sm font-black text-white shadow-sm">S</span>
+      <div className="flex h-full items-center justify-between gap-2 px-3 sm:gap-4 sm:px-7">
+        <Link href="/" className="flex min-w-0 items-center gap-2 sm:gap-3">
+          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-emerald-800 text-sm font-black text-white shadow-sm sm:h-9 sm:w-9">S</span>
           <span>
-            <span className="block text-sm font-bold tracking-[0.12em]">SENTINELAS</span>
-            <span className="block text-[11px] text-slate-500">Monitoramento urbano</span>
+            <span className="block text-xs font-bold tracking-[0.1em] sm:text-sm sm:tracking-[0.12em]">SENTINELAS</span>
+            <span className="hidden text-[11px] text-slate-500 sm:block">Monitoramento urbano</span>
           </span>
         </Link>
 
-        <div className="flex items-center gap-3 rounded-full border border-slate-200 bg-slate-50 px-3 py-2 sm:px-4">
+        <div className="flex shrink-0 items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-2 sm:gap-3 sm:px-4">
           <span className={`h-2 w-2 rounded-full ${connectionColor} ${!error && !loading ? "animate-pulse" : ""}`} />
           <span className="hidden text-xs font-medium text-slate-700 sm:inline">{connectionLabel}</span>
-          {updatedAt && <span className="border-l border-slate-200 pl-3 text-[11px] text-slate-500">{updatedAt.toLocaleTimeString("pt-BR")}</span>}
+          {updatedAt && <span className="text-[10px] text-slate-500 sm:border-l sm:border-slate-200 sm:pl-3 sm:text-[11px]">{updatedAt.toLocaleTimeString("pt-BR")}</span>}
         </div>
       </div>
     </header>
@@ -56,8 +56,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <div className="min-h-screen bg-slate-50">
         <TopBar />
 
-        <div className="flex min-h-[calc(100vh-4rem)]">
-          <aside className={`${expanded ? "w-56" : "w-16"} shrink-0 border-r border-slate-200 bg-slate-50 text-slate-700 transition-[width]`}>
+        <div className="flex min-h-[calc(100dvh-4rem)]">
+          <aside className={`${expanded ? "w-56" : "w-16"} hidden shrink-0 border-r border-slate-200 bg-slate-50 text-slate-700 transition-[width] md:block`}>
             <div className={`flex px-2 py-3 ${expanded ? "justify-end" : "justify-center"}`}>
               <button
                 type="button"
@@ -89,8 +89,25 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </nav>
           </aside>
 
-          <main className="min-w-0 flex-1 bg-slate-50 px-5 py-8 sm:px-8">{children}</main>
+          <main className="min-w-0 w-full flex-1 bg-slate-50 px-4 py-5 pb-24 sm:px-8 sm:py-8 sm:pb-24 md:pb-8">{children}</main>
         </div>
+
+        <nav aria-label="Navegação principal" className="mobile-bottom-nav fixed inset-x-0 bottom-0 z-[1200] grid grid-cols-4 border-t border-slate-200 bg-white/95 text-slate-600 shadow-[0_-4px_16px_rgb(15_23_42/8%)] backdrop-blur md:hidden">
+          {links.map(({ label, href, icon }) => {
+            const active = href === "/" ? pathname === "/" : pathname.startsWith(href);
+            return (
+              <Link
+                key={href}
+                href={href}
+                aria-current={active ? "page" : undefined}
+                className={`flex min-h-14 flex-col items-center justify-center gap-1 px-1 text-[10px] font-medium ${active ? "text-emerald-800" : "text-slate-500"}`}
+              >
+                <span className="h-5 w-5"><NavIcon name={icon} /></span>
+                <span>{label}</span>
+              </Link>
+            );
+          })}
+        </nav>
       </div>
     </DevicesProvider>
   );

@@ -25,16 +25,16 @@ export function DevicesView() {
     <>
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div><p className="text-sm text-emerald-800">Monitoramento</p><h1 className="text-3xl font-bold">Dispositivos</h1></div>
-        <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
-          <input aria-label="Buscar dispositivo" placeholder="Buscar por nome ou ID" value={query} onChange={(event) => setQuery(event.target.value)} className="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm" />
-          <select aria-label="Filtrar por tipo" value={typeFilter} onChange={(event) => setTypeFilter(event.target.value)} className="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm">
+        <div className="flex min-w-0 flex-col gap-2 sm:flex-row sm:flex-wrap">
+          <input aria-label="Buscar dispositivo" placeholder="Buscar por nome ou ID" value={query} onChange={(event) => setQuery(event.target.value)} className="w-full min-w-0 rounded-md border border-slate-300 bg-white px-3 py-2 text-sm sm:w-auto" />
+          <select aria-label="Filtrar por tipo" value={typeFilter} onChange={(event) => setTypeFilter(event.target.value)} className="w-full min-w-0 rounded-md border border-slate-300 bg-white px-3 py-2 text-sm sm:w-auto">
             <option value="">Todos os tipos</option><option value="bueiro">Bueiros</option><option value="lixeira">Lixeiras</option>
           </select>
-          <select aria-label="Filtrar por status" value={statusFilter} onChange={(event) => setStatusFilter(event.target.value)} className="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm">
+          <select aria-label="Filtrar por status" value={statusFilter} onChange={(event) => setStatusFilter(event.target.value)} className="w-full min-w-0 rounded-md border border-slate-300 bg-white px-3 py-2 text-sm sm:w-auto">
             <option value="">Todos os status</option><option value="ok">Normal</option><option value="atencao">Atenção</option><option value="critico">Crítico</option><option value="sem_leitura">Sem leitura</option>
           </select>
-          <label className="flex items-center gap-2 rounded-md border border-slate-300 bg-white px-3 py-2 text-sm"><input type="checkbox" checked={staleOnly} onChange={(event) => setStaleOnly(event.target.checked)} />Leitura antiga</label>
-          <button onClick={() => void refresh()} className="rounded-md bg-emerald-800 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-900">Atualizar</button>
+          <label className="flex min-h-10 items-center gap-2 rounded-md border border-slate-300 bg-white px-3 py-2 text-sm"><input type="checkbox" checked={staleOnly} onChange={(event) => setStaleOnly(event.target.checked)} />Leitura antiga</label>
+          <button onClick={() => void refresh()} className="min-h-10 w-full rounded-md bg-emerald-800 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-900 sm:w-auto">Atualizar</button>
         </div>
       </div>
       <p className="mb-4 text-sm text-slate-500">{loading ? "Buscando dados…" : `${filtered.length} ponto(s)`}{updatedAt ? ` · Consultado às ${updatedAt.toLocaleTimeString("pt-BR")}` : ""}</p>

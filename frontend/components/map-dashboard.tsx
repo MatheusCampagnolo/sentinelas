@@ -139,7 +139,7 @@ export function MapDashboard() {
   }
 
   return (
-    <section className="relative -mx-5 -my-8 h-[calc(100vh-4rem)] min-h-[560px] overflow-hidden bg-slate-100 sm:-mx-8">
+    <section className="relative -mx-4 -my-5 h-[calc(100dvh-7.5rem-env(safe-area-inset-bottom))] min-h-[320px] overflow-hidden bg-slate-100 sm:-mx-8 sm:-my-8 md:h-[calc(100vh-4rem)] md:min-h-[560px]">
       <DeviceMap
         devices={devices}
         selected={selected}
@@ -212,7 +212,7 @@ export function MapDashboard() {
         </div>
       </button>
 
-      {selected && <aside className={`${panelStyle} absolute right-4 top-28 z-[1000] max-h-[42vh] w-[min(22rem,calc(100%-2rem))] overflow-y-auto rounded-2xl p-4 sm:top-[5.5rem]`} aria-label="Detalhes do dispositivo selecionado">
+      {selected && <aside className={`${panelStyle} absolute right-4 top-[11rem] z-[1000] max-h-[35vh] w-[min(22rem,calc(100%-2rem))] overflow-y-auto rounded-2xl p-4 md:top-[7.5rem] md:max-h-[42vh]`} aria-label="Detalhes do dispositivo selecionado">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0"><p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-emerald-800">Ponto monitorado</p><h2 className="mt-1 truncate text-lg font-semibold">{selected.nome || selected.id_dispositivo}</h2><p className="mt-0.5 text-xs text-slate-500">{selected.id_dispositivo} · {selected.tipo || "tipo não informado"}</p></div>
           <button type="button" onClick={() => setSelectedId(null)} aria-label="Fechar detalhes" className="rounded-full p-1 text-slate-500 hover:bg-slate-100 hover:text-slate-900">×</button>
@@ -236,7 +236,7 @@ export function MapDashboard() {
         <span className="flex items-center gap-1.5 text-[11px]"><i className="h-2.5 w-2.5 rounded-full bg-slate-400" />Outro</span>
       </div>
 
-      <div className={`${panelStyle} absolute bottom-4 right-4 z-[900] w-[min(23rem,calc(100%-2rem))] rounded-2xl p-4`}>
+      <div className={`${panelStyle} absolute bottom-3 right-3 z-[900] max-h-[38%] w-[min(23rem,calc(100%-1.5rem))] overflow-y-auto rounded-2xl p-3 sm:bottom-4 sm:right-4 sm:max-h-none sm:w-[min(23rem,calc(100%-2rem))] sm:p-4`}>
         <div className="flex items-center justify-between gap-3">
           <div><p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-emerald-800">Planejamento</p><h2 className="mt-1 text-sm font-semibold">Rota de atendimento</h2></div>
           <button type="button" onClick={() => void generateRoute()} disabled={routing || locationStatus === "loading" || withCoordinates === 0} className="shrink-0 rounded-full bg-emerald-800 px-4 py-2 text-xs font-bold text-white hover:bg-emerald-900 disabled:cursor-not-allowed disabled:opacity-50">

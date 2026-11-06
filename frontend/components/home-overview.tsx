@@ -11,10 +11,10 @@ export function HomeOverview() {
 
   return (
     <div className="mx-auto max-w-7xl">
-      <section className="relative overflow-hidden rounded-[2rem] border border-slate-200 bg-white text-slate-900 shadow-sm">
+      <section className="relative min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white text-slate-900 shadow-sm sm:rounded-[2rem]">
         <div className="pointer-events-none absolute -right-24 -top-32 h-96 w-96 rounded-full bg-emerald-200/55 blur-3xl" />
         <div className="pointer-events-none absolute bottom-0 left-1/3 h-52 w-72 rounded-full bg-cyan-100/70 blur-3xl" />
-        <div className="relative grid gap-10 px-7 py-10 sm:px-10 sm:py-14 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:px-14 lg:py-16">
+        <div className="relative grid min-w-0 gap-8 px-4 py-8 sm:gap-10 sm:px-10 sm:py-14 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:px-14 lg:py-16">
           <div>
             <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs text-emerald-900">
               <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-600" />
@@ -26,11 +26,11 @@ export function HomeOverview() {
             <p className="mt-5 max-w-xl text-base leading-7 text-slate-600 sm:text-lg">
               O Sentinelas acompanha bueiros e lixeiras conectados, destaca pontos que precisam de atenção e ajuda a equipe de manutenção a decidir por onde começar.
             </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link href="/dispositivos" className="inline-flex items-center gap-2 rounded-full bg-emerald-800 px-5 py-3 text-sm font-bold text-white transition hover:bg-emerald-900">
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+              <Link href="/dispositivos" className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-emerald-800 px-5 py-3 text-sm font-bold text-white transition hover:bg-emerald-900 sm:w-auto">
                 Acompanhar dispositivos <span aria-hidden="true">→</span>
               </Link>
-              <Link href="/mapa" className="inline-flex items-center gap-2 rounded-full border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-800 transition hover:bg-slate-50">
+              <Link href="/mapa" className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-800 transition hover:bg-slate-50 sm:w-auto">
                 Explorar mapa
               </Link>
             </div>
@@ -42,15 +42,15 @@ export function HomeOverview() {
 
           <div className="relative mx-auto w-full max-w-lg">
             <div className="absolute -inset-3 rounded-[2rem] bg-gradient-to-br from-emerald-200/45 via-cyan-100/50 to-transparent blur-xl" />
-            <div className="relative rounded-[1.6rem] border border-slate-200 bg-white/95 p-5 shadow-xl shadow-slate-900/10 backdrop-blur-xl sm:p-6">
+            <div className="relative min-w-0 rounded-[1.3rem] border border-slate-200 bg-white/95 p-4 shadow-xl shadow-slate-900/10 backdrop-blur-xl sm:rounded-[1.6rem] sm:p-6">
               <div className="flex items-center justify-between gap-3 border-b border-slate-200 pb-4">
                 <div><p className="text-xs text-slate-500">Central de operações</p><h2 className="mt-1 font-semibold text-slate-900">Situação dos pontos</h2></div>
                 <span className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-[11px] font-medium text-emerald-800">Ao vivo</span>
               </div>
-              <div className="grid grid-cols-3 gap-3 py-5">
-                <div><p className="text-xs text-slate-500">Monitorados</p><p className="mt-1 text-2xl font-semibold text-slate-900">{loading ? "—" : devices.length}</p></div>
-                <div><p className="text-xs text-slate-500">Críticos</p><p className="mt-1 text-2xl font-semibold text-red-700">{loading ? "—" : critical.length}</p></div>
-                <div><p className="text-xs text-slate-500">Atenção</p><p className="mt-1 text-2xl font-semibold text-amber-700">{loading ? "—" : attention.length}</p></div>
+              <div className="grid grid-cols-3 gap-2 py-5 sm:gap-3">
+                <div><p className="text-[11px] text-slate-500 sm:text-xs">Monitorados</p><p className="mt-1 text-2xl font-semibold text-slate-900">{loading ? "—" : devices.length}</p></div>
+                <div><p className="text-[11px] text-slate-500 sm:text-xs">Críticos</p><p className="mt-1 text-2xl font-semibold text-red-700">{loading ? "—" : critical.length}</p></div>
+                <div><p className="text-[11px] text-slate-500 sm:text-xs">Atenção</p><p className="mt-1 text-2xl font-semibold text-amber-700">{loading ? "—" : attention.length}</p></div>
               </div>
               <div className="space-y-2">
                 {needsAttention.length ? needsAttention.map((device) => <div key={device.id_dispositivo} className="flex items-center justify-between gap-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-3">

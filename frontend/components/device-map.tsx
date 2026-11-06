@@ -95,7 +95,7 @@ export default function DeviceMap({
   );
 
   return (
-    <MapContainer center={INITIAL_CENTER} zoom={14} scrollWheelZoom zoomControl={false} className="map-light h-full min-h-[520px] w-full">
+    <MapContainer center={INITIAL_CENTER} zoom={14} scrollWheelZoom zoomControl={false} className="map-light h-full min-h-0 w-full">
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
         url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
