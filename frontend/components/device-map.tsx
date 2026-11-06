@@ -56,12 +56,17 @@ function pinColor(status?: string | null) {
   return "#64748b";
 }
 
-function devicePin(status: string | null | undefined, selected: boolean) {
+function devicePin(type: string | undefined, status: string | null | undefined, selected: boolean) {
   const color = pinColor(status);
+  const symbol = type === "bueiro"
+    ? `<g fill="none" stroke="${color}" stroke-linecap="round" stroke-width="1.6"><path d="M15.5 15.8h9M14.5 19h11M15.5 22.2h9"/><path d="M18 15.5v7M22 15.5v7"/></g>`
+    : type === "lixeira"
+      ? `<g fill="none" stroke="${color}" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><path d="M15.5 16.5h9M18 15h4M16.5 17.5l.7 6h5.6l.7-6M18.7 18.5v3.5M21.3 18.5v3.5"/></g>`
+      : `<circle cx="20" cy="19" r="3.5" fill="${color}"/>`;
 
   return L.divIcon({
     className: "device-pin-icon",
-    html: `<span class="device-pin${selected ? " device-pin--selected" : ""}"><svg viewBox="0 0 40 48" aria-hidden="true"><path d="M20 2C10 2 2 10 2 20c0 12 18 26 18 26s18-14 18-26C38 10 30 2 20 2Z" fill="${color}" stroke="#fff" stroke-width="3"/><circle cx="20" cy="19" r="8" fill="#fff"/><circle cx="20" cy="19" r="4" fill="${color}"/></svg></span>`,
+    html: `<span class="device-pin${selected ? " device-pin--selected" : ""}"><svg viewBox="0 0 40 48" aria-hidden="true"><path d="M20 2C10 2 2 10 2 20c0 12 18 26 18 26s18-14 18-26C38 10 30 2 20 2Z" fill="${color}" stroke="#fff" stroke-width="3"/><circle cx="20" cy="19" r="10" fill="#fff"/>${symbol}</svg></span>`,
     iconSize: [40, 48],
     iconAnchor: [20, 46],
     tooltipAnchor: [0, -38],
@@ -136,7 +141,7 @@ export default function DeviceMap({
           <Marker
             key={device.id_dispositivo}
             position={[device.lat!, device.long!]}
-            icon={devicePin(device.status_atual, isSelected)}
+            icon={devicePin(device.tipo, device.status_atual, isSelected)}
             title={device.nome || device.id_dispositivo}
             riseOnHover
             eventHandlers={{ click: () => onSelect(device) }}
