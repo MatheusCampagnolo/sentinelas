@@ -1,0 +1,11 @@
+{
+  "name": "sentinelas",
+  "private": true,
+  "packageManager": "pnpm@11.25.0",
+  "scripts": {
+    "dev": "pnpm --filter @sentinelas/dashboard dev",
+    "build": "pnpm --filter @sentinelas/dashboard build",
+    "lint": "pnpm --filter @sentinelas/dashboard lint",
+    "typecheck": "pnpm --filter @sentinelas/dashboard typecheck"
+  }
+}

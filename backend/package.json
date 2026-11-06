@@ -1,0 +1,6 @@
+{
+  "name": "@sentinelas/backend",
+  "private": true,
+  "version": "0.1.0",
+  "description": "AWS backend documentation and future Lambda source for Sentinelas"
+}
