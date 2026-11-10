@@ -2,9 +2,15 @@
 
 import { useEffect } from "react";
 import L from "leaflet";
-import { Circle, CircleMarker, MapContainer, Marker, Polyline, TileLayer, Tooltip, useMap, ZoomControl } from "react-leaflet";
+import { maplibreGL } from "@maplibre/maplibre-gl-leaflet";
+import { setWorkerUrl } from "maplibre-gl";
+import { Circle, CircleMarker, MapContainer, Marker, Polyline, Popup, Tooltip, useMap, ZoomControl } from "react-leaflet";
 import { Device } from "@/lib/devices";
 import { MAINTENANCE_BASE, RouteResult, UserLocation } from "@/lib/routing";
+
+if (typeof window !== "undefined") {
+  setWorkerUrl(new URL("maplibre-gl/dist/maplibre-gl-worker.mjs", import.meta.url).toString());
+}
 
 const INITIAL_CENTER: [number, number] = [MAINTENANCE_BASE.lat, MAINTENANCE_BASE.long];
 
@@ -50,27 +56,38 @@ function MapController({
 }
 
 function pinColor(status?: string | null) {
-  if (status === "critico") return "#dc2626";
-  if (status === "atencao") return "#d97706";
-  if (status === "ok") return "#15803d";
-  return "#64748b";
+  if (status === "critico") return "#ff3838";
+  if (status === "atencao") return "#ffb800";
+  if (status === "ok") return "#00d84a";
+  return "#8da2b8";
 }
 
-function devicePin(type: string | undefined, status: string | null | undefined, selected: boolean) {
+function devicePin(status: string | null | undefined, selected: boolean) {
   const color = pinColor(status);
-  const symbol = type === "bueiro"
-    ? `<g fill="none" stroke="${color}" stroke-linecap="round" stroke-width="1.6"><path d="M15.5 15.8h9M14.5 19h11M15.5 22.2h9"/><path d="M18 15.5v7M22 15.5v7"/></g>`
-    : type === "lixeira"
-      ? `<g fill="none" stroke="${color}" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><path d="M15.5 16.5h9M18 15h4M16.5 17.5l.7 6h5.6l.7-6M18.7 18.5v3.5M21.3 18.5v3.5"/></g>`
-      : `<circle cx="20" cy="19" r="3.5" fill="${color}"/>`;
-
+  const statusClass = status === "ok" ? "ok" : status === "atencao" ? "atencao" : status === "critico" ? "critico" : "sem-leitura";
   return L.divIcon({
     className: "device-pin-icon",
-    html: `<span class="device-pin${selected ? " device-pin--selected" : ""}"><svg viewBox="0 0 40 48" aria-hidden="true"><path d="M20 2C10 2 2 10 2 20c0 12 18 26 18 26s18-14 18-26C38 10 30 2 20 2Z" fill="${color}" stroke="#fff" stroke-width="3"/><circle cx="20" cy="19" r="10" fill="#fff"/>${symbol}</svg></span>`,
-    iconSize: [40, 48],
-    iconAnchor: [20, 46],
-    tooltipAnchor: [0, -38],
+    html: `<span class="device-pin-dot device-pin-dot--${statusClass}${selected ? " device-pin-dot--selected" : ""}" style="--pin-color:${color}" aria-hidden="true"></span>`,
+    iconSize: [34, 34],
+    iconAnchor: [17, 17],
+    tooltipAnchor: [0, -16],
   });
+}
+
+function OpenFreeMapLayer() {
+  const map = useMap();
+
+  useEffect(() => {
+    const layer = maplibreGL({
+      style: "https://tiles.openfreemap.org/styles/fiord",
+      interactive: false,
+      maxPitch: 0,
+    });
+    layer.addTo(map);
+    return () => { layer.remove(); };
+  }, [map]);
+
+  return null;
 }
 
 export default function DeviceMap({
@@ -100,21 +117,18 @@ export default function DeviceMap({
   );
 
   return (
-    <MapContainer center={INITIAL_CENTER} zoom={14} scrollWheelZoom zoomControl={false} className="map-light h-full min-h-0 w-full">
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
-        url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
+    <MapContainer center={INITIAL_CENTER} zoom={14} scrollWheelZoom zoomControl={false} className="map-dark h-full min-h-0 w-full">
+      <OpenFreeMapLayer />
       <ZoomControl position="bottomleft" />
       {route && route.positions.length > 1 && <>
         <Polyline positions={route.positions} pathOptions={{ color: "#fff", weight: 9, opacity: 0.9 }} />
-        <Polyline positions={route.positions} pathOptions={{ color: "#047857", weight: 5, opacity: 0.95 }} />
+        <Polyline positions={route.positions} pathOptions={{ color: "#35b8a0", weight: 5, opacity: 0.95 }} />
       </>}
 
       <CircleMarker
         center={INITIAL_CENTER}
         radius={focusBase ? 11 : 9}
-        pathOptions={{ color: "#fff", weight: 3, fillColor: focusBase ? "#047857" : "#f59e0b", fillOpacity: 1 }}
+        pathOptions={{ color: "#dce9f3", weight: 3, fillColor: focusBase ? "#35b8a0" : "#16445a", fillOpacity: 1 }}
         eventHandlers={{ click: onFocusBase }}
       >
         <Tooltip direction="top" permanent>Base · UniMAX Campus I{focusBase ? " · origem selecionada" : ""}</Tooltip>
@@ -141,12 +155,25 @@ export default function DeviceMap({
           <Marker
             key={device.id_dispositivo}
             position={[device.lat!, device.long!]}
-            icon={devicePin(device.tipo, device.status_atual, isSelected)}
+            icon={devicePin(device.status_atual, isSelected)}
             title={device.nome || device.id_dispositivo}
             riseOnHover
             eventHandlers={{ click: () => onSelect(device) }}
           >
             <Tooltip>{device.nome || device.id_dispositivo} · {device.status_atual || "sem_leitura"}</Tooltip>
+            <Popup className="sentinelas-device-popup" closeButton>
+              <div className="device-popup-card">
+                <div className={`device-popup-status device-popup-status--${device.status_atual ?? "sem-leitura"}`}>
+                  <span className="device-popup-status-dot" />{device.status_atual === "ok" ? "Normal" : device.status_atual === "atencao" ? "Atenção" : device.status_atual === "critico" ? "Crítico" : "Sem leitura"}
+                </div>
+                <h2>{device.nome || device.id_dispositivo}</h2>
+                <p className="device-popup-id">{device.id_dispositivo} · {device.tipo || "tipo não informado"}</p>
+                <dl>
+                  <div><dt>Ocupação</dt><dd>{device.nivel_ocupacao == null ? "—" : `${device.nivel_ocupacao}%`}</dd></div>
+                  <div><dt>Bateria</dt><dd>{device.bateria == null ? "Não monitorada" : `${device.bateria}%`}</dd></div>
+                </dl>
+              </div>
+            </Popup>
           </Marker>
         );
       })}
