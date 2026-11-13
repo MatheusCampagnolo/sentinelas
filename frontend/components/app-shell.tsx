@@ -10,7 +10,7 @@ const links = [
   { label: "Dispositivos", shortLabel: "Dispositivos", href: "/dispositivos", icon: "devices" },
   { label: "Mapa", shortLabel: "Mapa", href: "/mapa", icon: "map" },
   { label: "Alertas", shortLabel: "Alertas", href: "/alertas", icon: "alerts" },
-  { label: "Conheça o SENTINELAS", shortLabel: "Conheça", href: "/conheca", icon: "about" },
+  { label: "Sobre", shortLabel: "Sobre", href: "/conheca", icon: "about" },
 ] as const;
 
 function NavIcon({ name }: { name: (typeof links)[number]["icon"] }) {
@@ -59,8 +59,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <TopBar />
 
         <div className="relative flex min-h-[calc(100dvh-4rem)]">
-          <aside className={`${expanded ? "w-56 shadow-2xl" : "w-[4.5rem]"} absolute inset-y-0 left-0 z-[1050] border-r border-[#263b50] bg-[#0d1b2a] text-white transition-[width] duration-200`}>
-            <div className="flex justify-center px-2 py-3">
+          <aside className={`${expanded ? "w-56 shadow-2xl" : "w-[4.5rem]"} absolute inset-y-0 left-0 z-[1050] hidden border-r border-[#263b50] bg-[#0d1b2a] text-white transition-[width] duration-200 md:block`}>
+            <div className={`flex px-2 py-3 ${expanded ? "justify-end" : "justify-center"}`}>
               <button
                 type="button"
                 onClick={() => setExpanded((current) => !current)}
@@ -92,9 +92,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </nav>
           </aside>
 
-          {expanded && <button type="button" aria-label="Fechar menu" onClick={() => setExpanded(false)} className="absolute inset-0 z-[1040] cursor-default bg-black/30" />}
+          {expanded && <button type="button" aria-label="Fechar menu" onClick={() => setExpanded(false)} className="absolute inset-0 z-[1040] hidden cursor-default bg-black/30 md:block" />}
 
-          <main className="ml-[4.5rem] min-w-0 w-full flex-1 bg-[#0b1725] px-4 py-5 pb-24 sm:px-8 sm:py-8 sm:pb-24 md:pb-8">{children}</main>
+          <main className="ml-0 min-w-0 w-full flex-1 bg-[#0b1725] px-4 py-5 pb-24 sm:px-8 sm:py-8 sm:pb-24 md:ml-[4.5rem] md:pb-8">{children}</main>
         </div>
 
         <nav aria-label="Navegação principal móvel" className="mobile-bottom-nav fixed inset-x-0 bottom-0 z-[1200] grid grid-cols-5 border-t border-[#263b50] bg-[#0d1b2a]/95 text-slate-300 shadow-[0_-4px_16px_rgb(15_23_42/24%)] backdrop-blur md:hidden">

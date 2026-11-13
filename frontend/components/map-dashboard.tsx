@@ -147,7 +147,7 @@ export function MapDashboard() {
   }
 
   return (
-    <section className="relative -mx-4 -my-5 h-[calc(100dvh-8rem-env(safe-area-inset-bottom))] min-h-[420px] overflow-hidden bg-[#0b1725] sm:-mx-8 sm:-my-8 md:h-[calc(100dvh-4rem)] md:min-h-[600px]">
+    <section className="relative -mx-4 -my-5 h-[calc(100dvh-8rem-env(safe-area-inset-bottom))] min-h-[320px] overflow-hidden bg-[#0b1725] sm:-mx-8 sm:-my-8 md:h-[calc(100dvh-4rem)] md:min-h-[600px]">
       <DeviceMap
         devices={devices}
         selected={selected}
@@ -160,7 +160,7 @@ export function MapDashboard() {
         onFocusBase={focusBase}
       />
 
-      <div className={`${panelStyle} absolute left-4 top-4 z-[1000] w-[min(24rem,calc(100%-2rem))] rounded-xl p-3`}>
+      <div className={`${panelStyle} absolute left-3 right-3 top-3 z-[1000] w-auto rounded-xl p-3 md:left-4 md:right-auto md:top-4 md:w-[min(24rem,calc(100%-2rem))]`}>
         <div className="flex items-center gap-3">
           <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#1d344b] text-[#c5d3df]">
             <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8" /><path d="m16 16 4.5 4.5" /></svg>
@@ -194,7 +194,7 @@ export function MapDashboard() {
           </button>
           {search && <button type="button" onClick={() => setSearch("")} aria-label="Limpar busca" className="rounded-full px-2 py-1 text-[#94a3b8] transition hover:bg-[#1d344b] hover:text-white">×</button>}
         </div>
-        {search.trim() && <ul className="mt-3 max-h-64 overflow-auto border-t border-[#263b50] pt-2">
+        {search.trim() && <ul className="mt-3 max-h-[35dvh] overflow-auto border-t border-[#263b50] pt-2 md:max-h-64">
           {results.length ? results.map((device) => (
             <li key={device.id_dispositivo}>
               <button type="button" onClick={() => { selectDevice(device); setSearch(""); }} className="flex w-full items-center justify-between gap-3 rounded-xl px-3 py-2 text-left hover:bg-white/10">
@@ -210,7 +210,7 @@ export function MapDashboard() {
         type="button"
         onClick={focusBase}
         aria-pressed={baseFocused}
-        className={`${panelStyle} absolute right-4 top-[5.5rem] z-[900] flex max-w-[calc(100%-2rem)] items-center gap-3 rounded-xl px-4 py-3 text-left transition hover:bg-[#1d344b] sm:top-4 ${baseFocused ? "ring-2 ring-[#35b8a0]/50" : ""}`}
+        className={`${panelStyle} absolute left-3 right-3 top-[5.5rem] z-[900] flex w-auto max-w-none items-center gap-3 rounded-xl px-3 py-2.5 text-left transition hover:bg-[#1d344b] md:left-auto md:right-4 md:top-4 md:w-auto md:max-w-[calc(100%-2rem)] md:px-4 md:py-3 ${baseFocused ? "ring-2 ring-[#35b8a0]/50" : ""}`}
       >
         <div className="flex items-center gap-3">
           <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#35b8a0]/10 text-[#63cdb8]">
@@ -220,26 +220,26 @@ export function MapDashboard() {
         </div>
       </button>
 
-      {selected && <aside className="surface-panel absolute right-4 top-[11rem] z-[1000] max-h-[44vh] w-[min(22rem,calc(100%-2rem))] overflow-y-auto rounded-xl p-4 md:top-24 md:max-h-[55vh]" aria-label="Estado do dispositivo selecionado">
+      {selected && <aside className="surface-panel absolute left-3 right-3 top-[11rem] z-[1000] max-h-[calc(100%-19rem)] overflow-y-auto rounded-xl p-3 md:left-auto md:right-4 md:top-24 md:max-h-[55vh] md:w-[min(22rem,calc(100%-2rem))] md:p-4" aria-label="Estado do dispositivo selecionado">
         {(() => { const message = statusMessage(selected.status_atual, selected.tipo); return <div className={`rounded-lg border p-4 ${message.tone}`}><div className="flex items-start justify-between gap-3"><div><h2 className="text-base font-semibold leading-6">{message.title}</h2><p className="mt-2 text-sm leading-5 text-[#d5e0e9]">{message.description}</p></div><button type="button" onClick={() => setSelectedId(null)} aria-label="Fechar estado" className="rounded-md px-1 text-xl leading-6 text-[#a8b7c7] transition hover:bg-white/10 hover:text-white">×</button></div></div>; })()}
         <Link href={`/dispositivos/${encodeURIComponent(selected.id_dispositivo)}`} className="mt-3 inline-flex text-xs font-semibold text-[#63cdb8] transition hover:text-[#94e5d8]">Abrir detalhes completos <span className="ml-1">↗</span></Link>
       </aside>}
 
-      <div className={`${panelStyle} absolute bottom-16 left-4 z-[900] flex items-center gap-2 rounded-lg px-3 py-2 sm:gap-3 sm:px-4`} aria-label="Legenda do mapa">
+      <div className={`${panelStyle} absolute bottom-16 left-4 z-[900] hidden items-center gap-2 rounded-lg px-3 py-2 md:flex md:gap-3 md:px-4`} aria-label="Legenda do mapa">
         <span className="flex items-center gap-1.5 text-[10px] text-[#c5d1dc] sm:text-[11px]"><i className="h-2 w-2 rounded-full bg-emerald-600" />Normal</span>
         <span className="flex items-center gap-1.5 text-[10px] text-[#c5d1dc] sm:text-[11px]"><i className="h-2 w-2 rounded-full bg-amber-500" />Atenção</span>
         <span className="flex items-center gap-1.5 text-[10px] text-[#c5d1dc] sm:text-[11px]"><i className="h-2 w-2 rounded-full bg-red-600" />Crítico</span>
         <span className="hidden items-center gap-1.5 text-[11px] text-[#c5d1dc] sm:flex"><i className="h-2 w-2 rounded-full bg-slate-400" />Outro</span>
       </div>
 
-      <div className={`${panelStyle} absolute bottom-16 right-3 z-[900] max-h-[38%] w-[min(23rem,calc(100%-1.5rem))] overflow-y-auto rounded-xl p-3 sm:right-4 sm:max-h-none sm:w-[min(23rem,calc(100%-2rem))] sm:p-4`}>
+      <div className={`${panelStyle} absolute bottom-3 left-3 right-3 z-[900] max-h-[35%] w-auto overflow-y-auto rounded-xl p-3 md:bottom-4 md:left-auto md:right-4 md:max-h-none md:w-[min(23rem,calc(100%-2rem))] md:p-4`}>
         <div className="flex items-center justify-between gap-3">
           <div><p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#63cdb8]">Planejamento</p><h2 className="mt-1 text-sm font-semibold text-[#e8eef4]">Rota de atendimento</h2></div>
           <button type="button" onClick={() => void generateRoute()} disabled={routing || locationStatus === "loading" || withCoordinates === 0} className="shrink-0 rounded-lg bg-[#1d344b] px-4 py-2 text-xs font-bold text-white transition hover:bg-[#29445d] disabled:cursor-not-allowed disabled:opacity-50">
             {routing ? "Calculando..." : "Gerar rota"}
           </button>
         </div>
-        <p className="mt-2 text-xs leading-5 text-slate-300">Origem: {route?.origin.name ?? (baseFocused || !userLocation ? MAINTENANCE_BASE.name : userLocation.name)}. Inclui todos os {withCoordinates} ponto(s) com coordenadas; críticos só são colocados primeiro quando o tempo estimado não aumenta.</p>
+        <p className="mt-2 text-xs leading-5 text-slate-300"><span className="md:hidden">Origem: {route?.origin.name ?? (baseFocused || !userLocation ? MAINTENANCE_BASE.name : userLocation.name)} · {withCoordinates} ponto(s)</span><span className="hidden md:inline">Origem: {route?.origin.name ?? (baseFocused || !userLocation ? MAINTENANCE_BASE.name : userLocation.name)}. Inclui todos os {withCoordinates} ponto(s) com coordenadas; críticos só são colocados primeiro quando o tempo estimado não aumenta.</span></p>
         {error && <p className="mt-2 text-xs text-amber-200">Os dados exibidos podem estar desatualizados: falha ao consultar a API.</p>}
         {routeError && <p role="alert" className="mt-2 text-xs text-red-300">{routeError}</p>}
         {route && <div className="mt-3 border-t border-[#263b50] pt-3">

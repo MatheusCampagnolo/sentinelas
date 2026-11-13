@@ -74,6 +74,10 @@ body {
   color: #fff;
 }
 
+@media (max-width: 767px) {
+  .map-dark .leaflet-control-zoom { display: none; }
+}
+
 .map-dark .leaflet-control-attribution {
   border-top-left-radius: 8px;
   background: rgb(11 26 40 / 82%);
